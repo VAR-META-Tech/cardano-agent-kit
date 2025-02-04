@@ -1,0 +1,27 @@
+{
+    "name": "cardano-agent-kit",
+    "version": "1.0.0",
+    "description": "A TypeScript SDK for interacting with Cardano blockchain agents",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "prepublishOnly": "npm run build",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "cardano",
+        "blockchain",
+        "sdk"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/YOUR_USERNAME/cardano-agent-kit.git"
+    },
+    "author": "Your Name",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/node": "^22.13.1",
+        "typescript": "^5.7.3"
+    }
+}
