@@ -1,3 +1,3 @@
-export function helloWorld(name: string = "World"): string {
-    return `Hello, ${name}!`;
+export function helloCardano(name: string = "Cardano"): string {
+    return `Hello, ${name}! Welcome to Cardano Agent Kit.`;
 }
