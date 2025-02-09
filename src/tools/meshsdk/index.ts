@@ -10,54 +10,23 @@ export type ProviderType = "blockfrost" | "maestro" | "koios" | "u5c";
 export type NetworkType = "testnet" | "mainnet";
 
 export class MeshSDK {
-    private wallet: MeshWallet;
+    private wallet: MeshWallet | null = null;
     private provider: BlockfrostProvider | KoiosProvider | MaestroProvider | U5CProvider;
-    private mnemonic: string[];
+    private mnemonic?: string[];
+    private privateKey?: string;
     private networkId: 0 | 1; // 0 = Testnet, 1 = Mainnet
 
-    /**
-     * Default constructor with Blockfrost
-     * @param apiKey Blockfrost API Key
-     * @param network Network type ("testnet" or "mainnet")
-     */
-    constructor(apiKey: string, network?: NetworkType)
-
-    /**
-     * Constructor with custom provider
-     * @param providerType The blockchain provider ("blockfrost" | "maestro" | "koios" | "u5c")
-     * @param apiKey The API key required for the selected provider.
-     * @param network The network ("testnet" or "mainnet").
-     * @param existingMnemonic Optional mnemonic to restore an existing wallet.
-     */
-    constructor(providerType: ProviderType, apiKey: string, network?: NetworkType, existingMnemonic?: string[]);
-
     constructor(
-        providerOrApiKey: ProviderType | string,
-        apiKeyOrNetwork?: string | NetworkType,
-        networkOrMnemonic?: NetworkType | string[],
-        existingMnemonic?: string[]
+        providerType: ProviderType,
+        apiKey: string,
+        network?: NetworkType,
+        mnemonicOrBech32?: string[] | string
     ) {
-        // If only API key and network are provided, default to Blockfrost
-        let providerType: ProviderType = "blockfrost";
-        let apiKey: string;
-        let network: NetworkType = "testnet";
-        let mnemonic: string[] | undefined;
-
-        if (typeof providerOrApiKey === "string" && (apiKeyOrNetwork === "testnet" || apiKeyOrNetwork === "mainnet" || apiKeyOrNetwork === undefined)) {
-            apiKey = providerOrApiKey;
-            network = apiKeyOrNetwork || "testnet";
-        } else if (typeof providerOrApiKey === "string" && typeof apiKeyOrNetwork === "string") {
-            providerType = providerOrApiKey as ProviderType;
-            apiKey = apiKeyOrNetwork;
-            network = (networkOrMnemonic as NetworkType) || "testnet";
-            mnemonic = existingMnemonic;
-        } else {
-            throw new Error("Invalid constructor parameters");
-        }
+        let networkType: NetworkType = network ?? "testnet";
 
         if (!apiKey) throw new Error("API key is required");
 
-        this.networkId = network === "mainnet" ? 1 : 0; // Assign network ID
+        this.networkId = networkType === "mainnet" ? 1 : 0; // Assign network ID
 
         // ✅ Select the correct provider dynamically
         switch (providerType) {
@@ -65,7 +34,7 @@ export class MeshSDK {
                 this.provider = new BlockfrostProvider(apiKey);
                 break;
             case "maestro":
-                this.provider = new MaestroProvider({ apiKey, network: network === "mainnet" ? "Mainnet" : "Preprod" });
+                this.provider = new MaestroProvider({ apiKey, network: networkType === "mainnet" ? "Mainnet" : "Preprod" });
                 break;
             case "koios":
                 this.provider = new KoiosProvider(apiKey);
@@ -77,51 +46,89 @@ export class MeshSDK {
                 throw new Error("Invalid provider type");
         }
 
-        // ✅ Generate a new mnemonic if not provided
-        this.mnemonic = mnemonic || (MeshWallet.brew() as string[]);
+        // ✅ Determine how to initialize the wallet
+        let walletKey: { type: "mnemonic"; words: string[] } | { type: "root"; bech32: string };
+        if (Array.isArray(mnemonicOrBech32) && mnemonicOrBech32.length > 0) {
+            this.mnemonic = mnemonicOrBech32;
+            walletKey = { type: "mnemonic", words: this.mnemonic };
+        } else if (typeof mnemonicOrBech32 === "string") {
+            this.privateKey = mnemonicOrBech32;
+            walletKey = { type: "root", bech32: this.privateKey }; // ✅ Bech32 format
+        } else {
+            // If no key or an empty mnemonic is provided, generate a new wallet
+            this.mnemonic = MeshWallet.brew() as string[];
+            walletKey = { type: "mnemonic", words: this.mnemonic };
+        }
 
-        // ✅ Create the wallet instance
+
+        // ✅ Initialize the wallet instance
         this.wallet = new MeshWallet({
             networkId: this.networkId,
             fetcher: this.provider,
             submitter: this.provider,
-            key: {
-                type: "mnemonic",
-                words: this.mnemonic,
-            },
+            key: walletKey,
         });
+
     }
 
     /**
-     * Returns the wallet's mnemonic.
+     * Returns the wallet's mnemonic (if available).
      */
-    getMnemonic(): string[] {
+    getMnemonic(): string[] | undefined {
         return this.mnemonic;
+    }
+
+    /**
+     * Returns the wallet's private key (if available, in Bech32 format).
+     */
+    getPrivateKey(): string | undefined {
+        return this.privateKey;
     }
 
     /**
      * Returns the wallet's address.
      */
     async getAddress(): Promise<string> {
-        const addresses = await this.wallet.getUsedAddresses();
-        if (!addresses.length) throw new Error("No addresses found for this wallet");
-        return addresses[0];
+        if (!this.wallet) throw new Error("Wallet not initialized");
+        try {
+            const usedAddresses = await this.wallet.getUsedAddresses();
+            if (usedAddresses.length > 0) return usedAddresses[0];
+
+            // ✅ Try fetching an unused address
+            const unusedAddresses = await this.wallet.getUnusedAddresses();
+            if (unusedAddresses.length > 0) return unusedAddresses[0];
+
+            throw new Error("No addresses found. Try receiving funds first.");
+        } catch (error) {
+            throw new Error("Error fetching wallet address: " + error);
+        }
     }
 
+
     /**
-     * Fetches the wallet's balance.
-     */
-    async getBalance(): Promise<string> {
+    * Fetches all assets in the connected wallet.
+    * Returns an array of objects, each containing:
+    * - `unit`: Asset identifier (e.g., "lovelace" for ADA)
+    * - `quantity`: Amount held in the wallet
+    */
+    async getBalance(): Promise<{ unit: string; quantity: string }[]> {
         if (!this.wallet) throw new Error("Wallet not initialized");
 
         try {
-            const address = await this.getAddress();
-            const balance = await this.provider.fetchAccountInfo(address);
-            return balance.balance; // Returns balance in lovelace (1 ADA = 1,000,000 lovelace)
+            const balance = await this.wallet.getBalance();
+
+            if (!Array.isArray(balance)) {
+                throw new Error("Unexpected balance format from wallet.");
+            }
+
+            return balance; // ✅ Returns full asset list
         } catch (error) {
-            throw new Error("Error fetching balance: " + error);
+            throw new Error(`Error fetching balance: ${(error as Error).message}`);
         }
     }
+
+
+
 
     /**
      * Signs and submits a transaction.
