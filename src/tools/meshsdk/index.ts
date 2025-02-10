@@ -4,6 +4,7 @@ import {
     MaestroProvider,
     U5CProvider,
     MeshWallet,
+    Transaction,
 } from "@meshsdk/core";
 
 export type ProviderType = "blockfrost" | "maestro" | "koios" | "u5c";
@@ -60,7 +61,6 @@ export class MeshSDK {
             walletKey = { type: "mnemonic", words: this.mnemonic };
         }
 
-
         // ✅ Initialize the wallet instance
         this.wallet = new MeshWallet({
             networkId: this.networkId,
@@ -68,7 +68,6 @@ export class MeshSDK {
             submitter: this.provider,
             key: walletKey,
         });
-
     }
 
     /**
@@ -104,13 +103,12 @@ export class MeshSDK {
         }
     }
 
-
     /**
-    * Fetches all assets in the connected wallet.
-    * Returns an array of objects, each containing:
-    * - `unit`: Asset identifier (e.g., "lovelace" for ADA)
-    * - `quantity`: Amount held in the wallet
-    */
+     * Fetches all assets in the connected wallet.
+     * Returns an array of objects, each containing:
+     * - `unit`: Asset identifier (e.g., "lovelace" for ADA)
+     * - `quantity`: Amount held in the wallet
+     */
     async getBalance(): Promise<{ unit: string; quantity: string }[]> {
         if (!this.wallet) throw new Error("Wallet not initialized");
 
@@ -118,7 +116,7 @@ export class MeshSDK {
             const balance = await this.wallet.getBalance();
 
             if (!Array.isArray(balance)) {
-                throw new Error("Unexpected balance format from wallet.");
+                return []; // ✅ Return empty array if the response is invalid
             }
 
             return balance; // ✅ Returns full asset list
@@ -126,9 +124,6 @@ export class MeshSDK {
             throw new Error(`Error fetching balance: ${(error as Error).message}`);
         }
     }
-
-
-
 
     /**
      * Signs and submits a transaction.
@@ -138,9 +133,100 @@ export class MeshSDK {
         if (!this.wallet) throw new Error("Wallet not initialized");
 
         try {
-            return await this.wallet.signTx(txHex);
+            const txHash = await this.wallet.signTx(txHex);
+            return txHash;
         } catch (error) {
-            throw new Error("Error signing transaction: " + error);
+            throw new Error(`Error signing transaction: ${(error as Error).message}`);
         }
     }
+
+    /**
+     * **Send ADA (Lovelace) to a recipient.**
+     * @param recipientAddress The recipient's wallet address.
+     * @param amountLovelace Amount in **Lovelace** (1 ADA = 1,000,000 Lovelace).
+     * @returns The transaction hash.
+     */
+    async sendLovelace(recipientAddress: string, amountLovelace: string): Promise<string> {
+        if (!this.wallet) throw new Error("Wallet not initialized");
+
+        try {
+            // ✅ Get sender address
+            const senderAddress = await this.getAddress();
+
+            // ✅ Build the transaction
+            const tx = new Transaction({ initiator: this.wallet })
+                .sendLovelace(recipientAddress, amountLovelace)
+                .setChangeAddress(senderAddress);
+
+            // ✅ Sign and submit transaction
+            const unsignedTx = await tx.build();
+            const signedTx = await this.wallet.signTx(unsignedTx);
+            const txHash = await this.wallet.submitTx(signedTx);
+
+            return txHash;
+        } catch (error) {
+            console.error("Detailed Transaction Error:", error); // ✅ Print full error
+            throw new Error(`Error sending ADA: ${error instanceof Error ? error.message : JSON.stringify(error)}`);
+        }
+    }
+    /**
+       * **Registers a stake address and delegates to a stake pool**
+       * @param poolId - The stake pool ID to delegate to
+       * @returns The transaction hash
+       */
+    async registerAndStakeADA(poolId: string): Promise<string> {
+        if (!this.wallet) throw new Error("Wallet not initialized");
+
+        try {
+            console.log("🔍 Fetching reward (stake) address...");
+            const rewardAddresses = await this.wallet.getRewardAddresses();
+            if (!rewardAddresses || rewardAddresses.length === 0) {
+                throw new Error("No reward address found. Ensure this wallet supports staking.");
+            }
+            const rewardAddress = rewardAddresses[0];
+
+            // ✅ Ensure it is a valid `stake_test1...` address
+            if (!rewardAddress.startsWith("stake")) {
+                throw new Error(`Invalid stake address! Expected 'stake_test1...', got: ${rewardAddress}`);
+            }
+
+            console.log("✅ Valid Reward Address:", rewardAddress);
+
+            console.log("🔎 Checking if stake address is registered...");
+            const accountInfo = await this.provider.fetchAccountInfo(rewardAddress);
+            console.log("Account Info:", accountInfo);
+
+            const tx = new Transaction({ initiator: this.wallet });
+
+            if (!accountInfo || !accountInfo.active) {
+                console.log("🚀 Stake address is NOT registered. Registering...");
+                tx.registerStake(rewardAddress);
+            } else {
+                console.log("✅ Stake address is ALREADY registered.");
+            }
+
+            console.log("🔗 Delegating to stake pool:", poolId);
+
+            // ✅ Ensure rewardAddress is being correctly passed to delegateStake()
+            tx.delegateStake(rewardAddress, poolId);
+
+            console.log("⚙️ Building unsigned transaction...");
+            const unsignedTx = await tx.build();
+            console.log("📝 Unsigned Transaction:", unsignedTx);
+
+            console.log("🔑 Signing transaction...");
+            const signedTx = await this.wallet.signTx(unsignedTx);
+            console.log("✅ Signed Transaction:", signedTx);
+
+            console.log("📤 Submitting transaction...");
+            const txHash = await this.wallet.submitTx(signedTx);
+            console.log("✅ Stake Transaction Hash:", txHash);
+
+            return txHash;
+        } catch (error) {
+            console.error("🔥 Staking Error:", error);
+            throw new Error(`Error staking ADA: ${(error as Error).message}`);
+        }
+    }
+
 }

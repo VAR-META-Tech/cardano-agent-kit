@@ -54,4 +54,23 @@ export class CardanoToolKit {
     async signAndSendTx(txHex: string): Promise<string> {
         return await this.meshSDK.signAndSendTx(txHex);
     }
+
+    /**
+     * **Send ADA (Lovelace) to a recipient.**
+     * @param recipientAddress The recipient's wallet address.
+     * @param amountLovelace Amount in **Lovelace** (1 ADA = 1,000,000 Lovelace).
+     * @returns The transaction hash.
+     */
+    async sendLovelace(recipientAddress: string, amountLovelace: string): Promise<string> {
+        return await this.meshSDK.sendLovelace(recipientAddress, amountLovelace);
+    }
+
+    /**
+     * **Registers a stake address and delegates to a stake pool**
+     * @param poolId - The stake pool ID to delegate to
+     * @returns The transaction hash
+     */
+    async registerAndStakeADA(poolId: string): Promise<string> {
+        return await this.meshSDK.registerAndStakeADA(poolId);
+    }
 }
