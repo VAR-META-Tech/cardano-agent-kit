@@ -20,6 +20,7 @@ cardano-agent-kit/
 │   │   ├── othertools.ts     # Other tools ...
 │   ├── index.ts              # Entry point (Exports modules)
 │   ├── toolkit.ts            # High-level API for Cardano interactions
+│── examples/                 # Examples to use Cardano Tool Kit...
 │── test/
 │   ├── toolkit.test.ts       # Unit tests for CardanoToolKit
 │   ├── meshsdk.test.ts       # Unit tests for MeshSDK
