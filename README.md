@@ -10,6 +10,26 @@ Here is a comprehensive **README.md** for your `cardano-agent-kit` project. 🎯
 [![Node.js CI](https://github.com/thanhngoc541/cardano-agent-kit/actions/workflows/node.js.yml/badge.svg)](https://github.com/thanhngoc541/cardano-agent-kit/actions)
 
 ---
+## 📂 **Project Structure**
+```
+cardano-agent-kit/
+│── src/
+│   ├── tools/
+│   │   ├── meshsdk.ts        # Mesh SDK Wrapper (Handles wallet operations)
+│   │   ├── blockfrost.ts     # Blockfrost API Handler
+│   │   ├── othertools.ts     # Other tools ...
+│   ├── index.ts              # Entry point (Exports modules)
+│   ├── toolkit.ts            # High-level API for Cardano interactions
+│── test/
+│   ├── toolkit.test.ts       # Unit tests for CardanoToolKit
+│   ├── meshsdk.test.ts       # Unit tests for MeshSDK
+│── dist/                     # Compiled output (after build)
+│── package.json              # Project metadata & dependencies
+│── tsconfig.json             # TypeScript configuration
+│── README.md                 # Documentation
+│── LICENSE                   # MIT License
+```
+
 
 ## 🚀 **Features**
 ✅ Create & Restore **Cardano Wallets**  
@@ -123,7 +143,3 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 
 ## 🌟 **Support**
 If you find this project useful, please ⭐ **star the repository** and share it with the Cardano community!
-
----
-
-🚀 **Now your SDK is well-documented and ready to use!** 🎯
