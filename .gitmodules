@@ -1,0 +1,3 @@
+[submodule "examples/vercel-ai-demo"]
+	path = examples/vercel-ai-demo
+	url = https://github.com/thanhngoc541/cardano-vercel-ai-demo
