@@ -1,4 +1,4 @@
-import CardanoToolKit from "../src";
+import { CardanoToolKit } from "../src";
 
 describe("CardanoToolKit", () => {
     const API_KEY = "previewueSVWOXkYUQdtHQkj0CftJIibwETLjH0";

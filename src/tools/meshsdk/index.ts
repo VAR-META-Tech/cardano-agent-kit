@@ -7,8 +7,7 @@ import {
     Transaction,
 } from "@meshsdk/core";
 
-export type ProviderType = "blockfrost" | "maestro" | "koios" | "u5c";
-export type NetworkType = "testnet" | "mainnet";
+
 
 export class MeshSDK {
     private wallet: MeshWallet | null = null;
@@ -17,13 +16,19 @@ export class MeshSDK {
     private privateKey?: string;
     private networkId: 0 | 1; // 0 = Testnet, 1 = Mainnet
 
+    /**
+     * @param {string} providerType - The blockchain provider to use. Supported values: `"blockfrost"`, `"maestro"`, `"koios"`, `"u5c"`.
+     * @param {string} apiKey - The API key required for the selected provider.
+     * @param {string} [network="testnet"] - The Cardano network to use. Supported values: `"testnet"`, `"mainnet"`. Defaults to `"testnet"`.
+     * @param {string} [mnemonicOrBech32] - A **12/24-word mnemonic** (space-separated) or a **Bech32 root private key** for wallet import. If not provided, a new wallet is generated.
+     */
     constructor(
-        providerType: ProviderType,
+        providerType: string,
         apiKey: string,
-        network?: NetworkType,
+        network?: string,
         mnemonicOrBech32?: string[] | string
     ) {
-        let networkType: NetworkType = network ?? "testnet";
+        let networkType = network ?? "testnet";
 
         if (!apiKey) throw new Error("API key is required");
 
