@@ -1,6 +1,4 @@
-Here is a comprehensive **README.md** for your `cardano-agent-kit` project. 🎯  
 
----
 
 # **Cardano Agent Kit 🛠️**
 > A **TypeScript SDK** for interacting with the **Cardano blockchain** using Mesh SDK and other tools, etc.
