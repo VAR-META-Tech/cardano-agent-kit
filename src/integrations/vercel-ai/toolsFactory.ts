@@ -2,10 +2,10 @@ import { tool } from "ai";
 import { z } from "zod";
 import { CardanoToolKit } from "../../tools";
 
-type ToolDefinition = {
+export type ToolDefinition = {
     name: string;
     description: string;
-    parameters: Record<string, any>;
+    parameters: z.ZodType<any>;
     action: (params: any, toolkit: CardanoToolKit) => Promise<any>;
 };
 
@@ -19,7 +19,7 @@ export const createVercelAITools = (toolkit: CardanoToolKit, toolsList: ToolDefi
     return toolsList.reduce((acc, { name, description, parameters, action }) => {
         acc[name] = tool({
             description,
-            parameters: z.object(parameters),
+            parameters,
             execute: async (params) => {
                 try {
                     console.log(`🚀 Executing ${name} with params:`, params);
