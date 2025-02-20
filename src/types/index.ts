@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { CardanoToolKit } from "../../tools";
+import { CardanoToolKit } from "../tools";
 
 export type CardanoAction = {
     name: string;

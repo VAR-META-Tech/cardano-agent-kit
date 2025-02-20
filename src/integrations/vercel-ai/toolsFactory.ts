@@ -1,6 +1,6 @@
 import { tool } from "ai";
 import { CardanoToolKit } from "../../tools";
-import { CardanoAction } from "../types";
+import { CardanoAction } from "../../types";
 
 
 

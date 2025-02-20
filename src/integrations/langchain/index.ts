@@ -1,5 +1,5 @@
 import { createLangchainTools } from "./toolsFactory";
-import * as actions from "../actions";
+import * as actions from "../../actions";
 import { CardanoToolKit } from "../../tools";
 
 /**

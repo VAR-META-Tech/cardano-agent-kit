@@ -1,7 +1,7 @@
 import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 import { CardanoToolKit } from "../../tools";
-import { CardanoAction } from "../types";
+import { CardanoAction } from "../../types";
 
 /**
  * Generates an array of AI tools dynamically for a given `CardanoToolKit` instance.
