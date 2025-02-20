@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { CardanoToolKit } from "../../../tools";
-import { ToolDefinition } from "../toolsFactory";
+import { CardanoToolKit } from "../../tools";
+import { CardanoAction } from "../types";
 
-export const sendLovelace: ToolDefinition = {
+export const sendLovelace: CardanoAction = {
     name: "sendLovelace",
     description: "Send Lovelace (ADA smallest unit) to a given Cardano address",
     parameters: z.object({

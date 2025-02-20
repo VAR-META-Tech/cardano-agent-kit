@@ -1,7 +1,7 @@
 import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 import { CardanoToolKit } from "../../tools";
-import { ToolDefinition } from "../vercel-ai/toolsFactory";
+import { CardanoAction } from "../types";
 
 /**
  * Generates an array of AI tools dynamically for a given `CardanoToolKit` instance.
@@ -9,7 +9,7 @@ import { ToolDefinition } from "../vercel-ai/toolsFactory";
  * @param {ToolDefinition[]} toolsList - List of tool definitions.
  * @returns {Array<any>} - Array containing AI tools.
  */
-export const createLangchainTools = (toolkit: CardanoToolKit, toolsList: ToolDefinition[]) => {
+export const createLangchainTools = (toolkit: CardanoToolKit, toolsList: CardanoAction[]) => {
     return toolsList.map(({ name, description, parameters, action }) =>
         tool(
             async (params) => {

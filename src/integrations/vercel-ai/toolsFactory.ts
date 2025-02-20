@@ -1,13 +1,8 @@
 import { tool } from "ai";
-import { z } from "zod";
 import { CardanoToolKit } from "../../tools";
+import { CardanoAction } from "../types";
 
-export type ToolDefinition = {
-    name: string;
-    description: string;
-    parameters: z.ZodType<any>;
-    action: (params: any, toolkit: CardanoToolKit) => Promise<any>;
-};
+
 
 /**
  * Generates multiple AI tools dynamically for a given `CardanoToolKit` instance.
@@ -15,7 +10,7 @@ export type ToolDefinition = {
  * @param {ToolDefinition[]} toolsList - List of tools to create
  * @returns {Record<string, any>} - Object containing AI tools
  */
-export const createVercelAITools = (toolkit: CardanoToolKit, toolsList: ToolDefinition[]) => {
+export const createVercelAITools = (toolkit: CardanoToolKit, toolsList: CardanoAction[]) => {
     return toolsList.reduce((acc, { name, description, parameters, action }) => {
         acc[name] = tool({
             description,
