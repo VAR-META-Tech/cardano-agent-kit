@@ -36,7 +36,3 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 # cardano-vercel-ai-demo
 # cardano-langchain-chat
-# cardano-langchain-chat
-# cardano-langchain-chat
-# cardano-langchain-chat
-# cardano-langchain-chat
