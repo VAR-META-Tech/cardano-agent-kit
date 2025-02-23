@@ -248,15 +248,16 @@ export class MeshSDK {
         }
     }
 
-/**
- * **Mint a new NFT**
- * @param assetName - The name of the NFT
- * @param assetQuantity - The quantity to mint (default 1)
- * @param recipient - The recipient's Cardano address
- * @param metadata - Metadata including name, image, mediaType, and description
- * @returns The transaction hash
- */
-    async mintNFT(
+    /**
+      * **Mint an Asset (NFT or Token)**
+      * @param assetName - The name of the asset (NFT or token)
+      * @param assetQuantity - The quantity to mint (default 1 for NFTs)
+      * @param recipient - The recipient's Cardano address
+      * @param metadata - Metadata including name, image, mediaType, and description
+      * @param label - "721" for NFTs, "20" for fungible tokens (default: "721")
+      * @returns The transaction hash
+      */
+    async mintAsset(
         assetName: string,
         assetQuantity: string = "1",
         recipient: string,
@@ -265,33 +266,28 @@ export class MeshSDK {
             image: string;
             mediaType: string;
             description: string | string[];
-        }
+        },
+        label: "721" | "20" = "721"
     ): Promise<string> {
         if (!this.wallet) throw new Error("Wallet not initialized");
 
-        // ✅ Get payment address
         const address = await this.getAddress();
-
-        // ✅ Create forging script
         const forgingScript = ForgeScript.withOneSignature(address);
 
-        // ✅ Define NFT asset
         const asset: Mint = {
             assetName,
             assetQuantity,
             metadata,
-            label: "721",
+            label,
             recipient,
         };
 
-        // ✅ Build and submit transaction
         const tx = new Transaction({ initiator: this.wallet }).mintAsset(forgingScript, asset);
         const unsignedTx = await tx.build();
         const signedTx = await this.wallet.signTx(unsignedTx);
-        const txHash = await this.wallet.submitTx(signedTx);
-
-        return txHash;
+        return await this.wallet.submitTx(signedTx);
     }
+
 
     /**
      * **Burn an asset (NFT or token) from the wallet**

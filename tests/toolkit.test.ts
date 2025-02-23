@@ -82,7 +82,7 @@ describe("CardanoToolKit", () => {
     describe("🔹 NFT Minting", () => {
         it("should mint an NFT (mocked)", async () => {
 
-            const txHash = await toolkit.mintNFT(
+            const txHash = await toolkit.mintAsset(
                 "MeshNFT",
                 "1",
                 TEST_RECIPIENT,
@@ -102,9 +102,9 @@ describe("CardanoToolKit", () => {
         });
 
         it("should handle mintNFT errors", async () => {
-            jest.spyOn(toolkit, "mintNFT").mockRejectedValue(new Error("Invalid recipient address"));
+            jest.spyOn(toolkit, "mintAsset").mockRejectedValue(new Error("Invalid recipient address"));
 
-            await expect(toolkit.mintNFT(
+            await expect(toolkit.mintAsset(
                 "MeshNFT",
                 "1",
                 "INVALID_ADDRESS",

@@ -71,14 +71,15 @@ export class CardanoToolKit {
     }
 
     /**
-     * **Mint a new NFT on Cardano.**
-     * @param assetName - The name of the NFT
-     * @param assetQuantity - The quantity to mint (default: 1)
-     * @param recipient - The recipient's Cardano address
-     * @param metadata - Metadata including name, image, mediaType, and description
-     * @returns The transaction hash
-     */
-    async mintNFT(
+       * **Mint a Cardano asset (NFT or token).**
+       * @param assetName - The name of the asset (NFT or token)
+       * @param assetQuantity - The quantity to mint (default: 1 for NFTs)
+       * @param recipient - The recipient's Cardano address
+       * @param metadata - Metadata including name, image, mediaType, and description
+       * @param label - "721" for NFTs, "20" for fungible tokens (default: "721")
+       * @returns The transaction hash
+       */
+    async mintAsset(
         assetName: string,
         assetQuantity: string = "1",
         recipient: string,
@@ -87,12 +88,13 @@ export class CardanoToolKit {
             image: string;
             mediaType: string;
             description: string | string[];
-        }
+        },
+        label: "721" | "20" = "721"
     ): Promise<string> {
         try {
-            return await this.meshSDK.mintNFT(assetName, assetQuantity, recipient, metadata);
+            return await this.meshSDK.mintAsset(assetName, assetQuantity, recipient, metadata, label);
         } catch (error) {
-            throw new Error(`Error minting NFT: ${(error as Error).message}`);
+            throw new Error(`Error minting asset: ${(error as Error).message}`);
         }
     }
 
