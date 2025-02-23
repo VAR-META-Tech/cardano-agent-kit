@@ -111,4 +111,19 @@ export class CardanoToolKit {
             throw new Error(`Error burning asset: ${(error as Error).message}`);
         }
     }
+
+    /**
+     * **Send a Cardano asset (NFT or token) to another address.**
+     * @param recipientAddress - The recipient's Cardano address
+     * @param assetUnit - The unique asset identifier (`policyId + assetNameHex`)
+     * @param assetQuantity - The quantity to transfer
+     * @returns The transaction hash
+     */
+    async sendAsset(recipientAddress: string, assetUnit: string, assetQuantity: string): Promise<string> {
+        try {
+            return await this.meshSDK.sendAsset(recipientAddress, assetUnit, assetQuantity);
+        } catch (error) {
+            throw new Error(`Error sending asset: ${(error as Error).message}`);
+        }
+    }
 }

@@ -309,4 +309,32 @@ export class MeshSDK {
         return await this.wallet.submitTx(signedTx);
     }
 
+    async sendAsset(
+        recipientAddress: string,
+        assetUnit: string,
+        assetQuantity: string
+    ): Promise<string> {
+        if (!this.wallet) throw new Error("Wallet not initialized");
+
+        try {
+            // ✅ Get sender address
+            const senderAddress = await this.getAddress();
+
+            // ✅ Build the transaction
+            const tx = new Transaction({ initiator: this.wallet })
+                .sendAssets(recipientAddress, [{ unit: assetUnit, quantity: assetQuantity }])
+                .setChangeAddress(senderAddress);
+
+            // ✅ Sign and submit transaction
+            const unsignedTx = await tx.build();
+            const signedTx = await this.wallet.signTx(unsignedTx);
+            const txHash = await this.wallet.submitTx(signedTx);
+
+            return txHash;
+        } catch (error) {
+            console.error("🔥 Error transferring asset:", error);
+            throw new Error(`Error sending asset: ${error instanceof Error ? error.message : JSON.stringify(error)}`);
+        }
+    }
+
 }
