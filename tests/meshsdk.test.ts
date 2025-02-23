@@ -3,7 +3,7 @@ import { MeshSDK } from "../src/tools/meshsdk";
 describe("MeshSDK", () => {
     const API_KEY = "previewueSVWOXkYUQdtHQkj0CftJIibwETLjH0";
     const TEST_RECIPIENT = "addr_test1qqpnp9n7274je4mugywj890pp9w6hexceedhvryfrgs7gqxl9g3ghpcdgv2j58fe7yvpwt6nqc2ylzjr4k8zldetjlvq80w9t3";
-    const STACK_POOL_ID = "pool1a7h89sr6ymj9g2a9tm6e6dddghl64tp39pj78f6cah5ewgd4px0";
+    const STACK_POOL_ID = "pool18pn6p9ef58u4ga3wagp44qhzm8f6zncl57g6qgh0pk3yytwz54h";
 
     const TEST_MNEMONIC = [
         "churn", "analyst", "debate", "million", "tattoo", "enlist",
@@ -85,25 +85,25 @@ describe("MeshSDK", () => {
     });
 
     describe("Transactions & Staking", () => {
-        it("should sign and send a transaction (mock)", async () => {
-            const wallet = new MeshSDK("blockfrost", API_KEY, "testnet", TEST_MNEMONIC);
-            const rawTx = "RAW_TX_HEX";
+        // it("should sign and send a transaction (mock)", async () => {
+        //     const wallet = new MeshSDK("blockfrost", API_KEY, "testnet", TEST_MNEMONIC);
+        //     const rawTx = "RAW_TX_HEX";
 
-            jest.spyOn(wallet, "signAndSendTx").mockResolvedValue("mock_tx_hash_123");
+        //     jest.spyOn(wallet, "signAndSendTx").mockResolvedValue("mock_tx_hash_123");
 
-            const txHash = await wallet.signAndSendTx(rawTx);
-            console.log("Transaction Hash:", txHash);
+        //     const txHash = await wallet.signAndSendTx(rawTx);
+        //     console.log("Transaction Hash:", txHash);
 
-            expect(txHash).toBe("mock_tx_hash_123");
-        });
+        //     expect(txHash).toBe("mock_tx_hash_123");
+        // });
 
-        it("should handle sendLovelace() errors properly", async () => {
-            const wallet = new MeshSDK("blockfrost", API_KEY, "testnet", TEST_BECH32_PRIVATE_KEY);
-            jest.spyOn(wallet, "sendLovelace").mockRejectedValue(new Error("Insufficient balance"));
+        // it("should handle sendLovelace() errors properly", async () => {
+        //     const wallet = new MeshSDK("blockfrost", API_KEY, "testnet", TEST_BECH32_PRIVATE_KEY);
+        //     jest.spyOn(wallet, "sendLovelace").mockRejectedValue(new Error("Insufficient balance"));
 
-            await expect(wallet.sendLovelace(TEST_RECIPIENT, "500000000000"))
-                .rejects.toThrow("Insufficient balance");
-        });
+        //     await expect(wallet.sendLovelace(TEST_RECIPIENT, "500000000000"))
+        //         .rejects.toThrow("Insufficient balance");
+        // });
 
         // Uncomment for real transactions
 

@@ -69,4 +69,44 @@ export class CardanoToolKit {
             throw new Error(`Error staking ADA: ${(error as Error).message}`);
         }
     }
+
+    /**
+     * **Mint a new NFT on Cardano.**
+     * @param assetName - The name of the NFT
+     * @param assetQuantity - The quantity to mint (default: 1)
+     * @param recipient - The recipient's Cardano address
+     * @param metadata - Metadata including name, image, mediaType, and description
+     * @returns The transaction hash
+     */
+    async mintNFT(
+        assetName: string,
+        assetQuantity: string = "1",
+        recipient: string,
+        metadata: {
+            name: string;
+            image: string;
+            mediaType: string;
+            description: string | string[];
+        }
+    ): Promise<string> {
+        try {
+            return await this.meshSDK.mintNFT(assetName, assetQuantity, recipient, metadata);
+        } catch (error) {
+            throw new Error(`Error minting NFT: ${(error as Error).message}`);
+        }
+    }
+
+    /**
+     * **Burn a Cardano asset (NFT or token).**
+     * @param assetUnit - The asset's unique identifier (`policyId + assetNameHex`)
+     * @param quantity - The quantity to burn (default: 1)
+     * @returns The transaction hash
+     */
+    async burnAsset(assetUnit: string, quantity: string = "1"): Promise<string> {
+        try {
+            return await this.meshSDK.burnAsset(assetUnit, quantity);
+        } catch (error) {
+            throw new Error(`Error burning asset: ${(error as Error).message}`);
+        }
+    }
 }

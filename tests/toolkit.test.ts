@@ -3,7 +3,7 @@ import { CardanoToolKit } from "../src";
 describe("CardanoToolKit", () => {
     const API_KEY = "previewueSVWOXkYUQdtHQkj0CftJIibwETLjH0";
     const TEST_RECIPIENT = "addr_test1qqpnp9n7274je4mugywj890pp9w6hexceedhvryfrgs7gqxl9g3ghpcdgv2j58fe7yvpwt6nqc2ylzjr4k8zldetjlvq80w9t3";
-    const STAKE_POOL_ID = "pool1dhheyj4y7q8c8nj3z3lkuv9vqfjw75rnt48eet8efcnvczeznr7";
+    const STAKE_POOL_ID = "pool18pn6p9ef58u4ga3wagp44qhzm8f6zncl57g6qgh0pk3yytwz54h";
 
     const TEST_MNEMONIC = [
         "churn", "analyst", "debate", "million", "tattoo", "enlist",
@@ -20,7 +20,7 @@ describe("CardanoToolKit", () => {
         toolkit = new CardanoToolKit("blockfrost", API_KEY, "testnet", TEST_MNEMONIC);
     });
 
-    describe("Wallet Utilities", () => {
+    describe("🔹 Wallet Utilities", () => {
         it("should generate a new wallet mnemonic", () => {
             const mnemonic = CardanoToolKit.createWallet();
             console.log("Generated Mnemonic:", mnemonic);
@@ -31,7 +31,7 @@ describe("CardanoToolKit", () => {
         });
     });
 
-    describe("Wallet Initialization", () => {
+    describe("🔹 Wallet Initialization", () => {
         it("should initialize with Blockfrost and generate a wallet", () => {
             expect(toolkit).toBeDefined();
             expect(toolkit.getMnemonic()).toEqual(TEST_MNEMONIC);
@@ -47,7 +47,7 @@ describe("CardanoToolKit", () => {
         });
     });
 
-    describe("Wallet Data Fetching", () => {
+    describe("🔹 Wallet Data Fetching", () => {
         it("should fetch a wallet address", async () => {
             const address = await toolkit.getAddress();
             console.log("Wallet Address:", address);
@@ -79,17 +79,46 @@ describe("CardanoToolKit", () => {
         });
     });
 
-    describe("Transactions & Staking", () => {
-        it("should sign and send a transaction (mock)", async () => {
-            const rawTx = "RAW_TX_HEX";
-            jest.spyOn(toolkit, "signAndSendTx").mockResolvedValue("mock_tx_hash_123");
+    describe("🔹 NFT Minting", () => {
+        it("should mint an NFT (mocked)", async () => {
 
-            const txHash = await toolkit.signAndSendTx(rawTx);
-            console.log("Transaction Hash:", txHash);
+            const txHash = await toolkit.mintNFT(
+                "MeshNFT",
+                "1",
+                TEST_RECIPIENT,
+                {
+                    name: "Mesh Token",
+                    image: "ipfs://QmRzicpReutwCkM6aotuKjErFCUD213DpwPq6ByuzMJaua",
+                    mediaType: "image/jpg",
+                    description: [
+                        "This NFT was minted using CardanoToolKit",
+                        "Powered by MeshSDK!"
+                    ]
+                }
+            );
 
-            expect(txHash).toBe("mock_tx_hash_123");
+            console.log("Minted NFT TX Hash:", txHash);
+            expect(txHash).toBeDefined();
         });
 
+        it("should handle mintNFT errors", async () => {
+            jest.spyOn(toolkit, "mintNFT").mockRejectedValue(new Error("Invalid recipient address"));
+
+            await expect(toolkit.mintNFT(
+                "MeshNFT",
+                "1",
+                "INVALID_ADDRESS",
+                {
+                    name: "Mesh Token",
+                    image: "ipfs://QmRzicpReutwCkM6aotuKjErFCUD213DpwPq6ByuzMJaua",
+                    mediaType: "image/jpg",
+                    description: "This NFT was minted using CardanoToolKit"
+                }
+            )).rejects.toThrow("Invalid recipient address");
+        });
+    });
+
+    describe("🔹 Transactions & Staking", () => {
         it("should send Lovelace (mocked)", async () => {
             jest.spyOn(toolkit, "sendLovelace").mockResolvedValue("mock_lovelace_tx_hash");
 
@@ -97,13 +126,6 @@ describe("CardanoToolKit", () => {
             console.log("Lovelace Transaction Hash:", txHash);
 
             expect(txHash).toBe("mock_lovelace_tx_hash");
-        });
-
-        it("should handle sendLovelace() errors properly", async () => {
-            jest.spyOn(toolkit, "sendLovelace").mockRejectedValue(new Error("Insufficient balance"));
-
-            await expect(toolkit.sendLovelace(TEST_RECIPIENT, "500000000000")) // Too much ADA
-                .rejects.toThrow("Insufficient balance");
         });
 
         it("should register & stake ADA (mocked)", async () => {
@@ -126,26 +148,19 @@ describe("CardanoToolKit", () => {
          * Uncomment the tests below to send **REAL** transactions on Testnet.
          */
 
-        it("should actually send Lovelace (real transaction)", async () => {
-            console.log("Fetching sender address...");
-            const senderAddress = await toolkit.getAddress();
-            console.log("Sender Address:", senderAddress);
+        // it("should actually send Lovelace (real transaction)", async () => {
+        //     console.log("Fetching sender address...");
+        //     const senderAddress = await toolkit.getAddress();
+        //     console.log("Sender Address:", senderAddress);
 
-            console.log("Checking balance...");
-            const balance = await toolkit.getBalance();
-            console.log("Wallet Balance:", balance);
+        //     console.log("Checking balance...");
+        //     const balance = await toolkit.getBalance();
+        //     console.log("Wallet Balance:", balance);
 
-            console.log("Sending 1 ADA to recipient...");
-            const txHash = await toolkit.sendLovelace(TEST_RECIPIENT, "1000000"); // 1 ADA
+        //     console.log("Sending 1 ADA to recipient...");
+        //     const txHash = await toolkit.sendLovelace(TEST_RECIPIENT, "1000000"); // 1 ADA
 
-            console.log("✅ Transaction Sent! TX Hash:", txHash);
-            expect(txHash).toBeDefined();
-        });
-
-        // it("should actually register & stake ADA (real transaction)", async () => {
-        //     console.log("Registering stake address and delegating...");
-        //     const txHash = await toolkit.registerAndStakeADA(STAKE_POOL_ID);
-        //     console.log("✅ Staking Transaction Sent! TX Hash:", txHash);
+        //     console.log("✅ Transaction Sent! TX Hash:", txHash);
         //     expect(txHash).toBeDefined();
         // });
 

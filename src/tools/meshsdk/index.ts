@@ -5,6 +5,9 @@ import {
     U5CProvider,
     MeshWallet,
     Transaction,
+    ForgeScript,
+    Mint,
+    Asset,
 } from "@meshsdk/core";
 
 
@@ -243,6 +246,71 @@ export class MeshSDK {
             console.error("🔥 Staking Error:", error);
             throw new Error(`Error staking ADA: ${(error as Error).message}`);
         }
+    }
+
+/**
+ * **Mint a new NFT**
+ * @param assetName - The name of the NFT
+ * @param assetQuantity - The quantity to mint (default 1)
+ * @param recipient - The recipient's Cardano address
+ * @param metadata - Metadata including name, image, mediaType, and description
+ * @returns The transaction hash
+ */
+    async mintNFT(
+        assetName: string,
+        assetQuantity: string = "1",
+        recipient: string,
+        metadata: {
+            name: string;
+            image: string;
+            mediaType: string;
+            description: string | string[];
+        }
+    ): Promise<string> {
+        if (!this.wallet) throw new Error("Wallet not initialized");
+
+        // ✅ Get payment address
+        const address = await this.getAddress();
+
+        // ✅ Create forging script
+        const forgingScript = ForgeScript.withOneSignature(address);
+
+        // ✅ Define NFT asset
+        const asset: Mint = {
+            assetName,
+            assetQuantity,
+            metadata,
+            label: "721",
+            recipient,
+        };
+
+        // ✅ Build and submit transaction
+        const tx = new Transaction({ initiator: this.wallet }).mintAsset(forgingScript, asset);
+        const unsignedTx = await tx.build();
+        const signedTx = await this.wallet.signTx(unsignedTx);
+        const txHash = await this.wallet.submitTx(signedTx);
+
+        return txHash;
+    }
+
+    /**
+     * **Burn an asset (NFT or token) from the wallet**
+     * @param assetUnit - The asset unit to burn
+     * @param quantity - The quantity of the asset to burn
+     * @returns {Promise<string>} - The transaction hash
+     */
+    async burnAsset(assetUnit: string, quantity: string): Promise<string> {
+        if (!this.wallet) throw new Error("Wallet not initialized");
+
+        const address = await this.getAddress();
+        const forgingScript = ForgeScript.withOneSignature(address);
+
+        const asset: Asset = { unit: assetUnit, quantity };
+
+        const tx = new Transaction({ initiator: this.wallet }).burnAsset(forgingScript, asset);
+        const unsignedTx = await tx.build();
+        const signedTx = await this.wallet.signTx(unsignedTx);
+        return await this.wallet.submitTx(signedTx);
     }
 
 }
