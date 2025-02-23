@@ -12,6 +12,14 @@ export class CardanoToolKit {
         this.meshSDK = new MeshSDK(providerType, apiKey, network, mnemonicOrBech32);
     }
 
+    /**
+     * **Static function to create a new wallet and return its mnemonic.**
+     * @returns {string[]} The newly generated mnemonic.
+     */
+    static createWallet(): string[] {
+        return MeshSDK.createWallet();
+    }
+
     getMnemonic(): string[] | undefined {
         return this.meshSDK.getMnemonic();
     }

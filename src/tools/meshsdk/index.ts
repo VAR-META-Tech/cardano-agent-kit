@@ -52,27 +52,38 @@ export class MeshSDK {
                 throw new Error("Invalid provider type");
         }
 
-        // ✅ Determine how to initialize the wallet
+        this.initializeWallet(mnemonicOrBech32);
+
+    }
+
+    private initializeWallet(mnemonicOrBech32?: string[] | string) {
         let walletKey: { type: "mnemonic"; words: string[] } | { type: "root"; bech32: string };
+
         if (Array.isArray(mnemonicOrBech32) && mnemonicOrBech32.length > 0) {
             this.mnemonic = mnemonicOrBech32;
             walletKey = { type: "mnemonic", words: this.mnemonic };
         } else if (typeof mnemonicOrBech32 === "string") {
             this.privateKey = mnemonicOrBech32;
-            walletKey = { type: "root", bech32: this.privateKey }; // ✅ Bech32 format
+            walletKey = { type: "root", bech32: this.privateKey };
         } else {
-            // If no key or an empty mnemonic is provided, generate a new wallet
-            this.mnemonic = MeshWallet.brew() as string[];
+            this.mnemonic = MeshSDK.createWallet(); // ✅ Generate new wallet mnemonic
             walletKey = { type: "mnemonic", words: this.mnemonic };
         }
 
-        // ✅ Initialize the wallet instance
         this.wallet = new MeshWallet({
             networkId: this.networkId,
             fetcher: this.provider,
             submitter: this.provider,
             key: walletKey,
         });
+    }
+
+    /**
+     * **Static function to generate a new wallet mnemonic**
+     * @returns {string[]} The newly generated mnemonic.
+     */
+    static createWallet(): string[] {
+        return MeshWallet.brew() as string[];
     }
 
     /**
