@@ -13,6 +13,7 @@
         "test:langchain": "cd examples/cardano-langchain-chat && npm i && npm run dev",
         "test:vercel-ai": "cd examples/vercel-ai-demo && npm i && npm run dev",
         "update:vercel-ai": "cd examples/vercel-ai-demo && npm i && npm i cardano-agent-kit && npm run dev",
+        "update:langchain": "cd examples/cardano-langchain-chat && npm i && npm i cardano-agent-kit && npm run dev",
         "test:toolkit": "cd examples/cardano-toolkit && npm i && npm start"
     },
     "keywords": [
