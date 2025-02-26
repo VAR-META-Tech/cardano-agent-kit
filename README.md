@@ -1,8 +1,10 @@
-# **Cardano Agent Kit 🛠️**
-> A **TypeScript SDK** for interacting with the **Cardano blockchain** using Mesh SDK, AI-powered tools, and other utilities.
 
-[![npm version](https://img.shields.io/npm/v/cardano-agent-kit.svg)](https://www.npmjs.com/package/cardano-agent-kit)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
+# **Cardano Agent Kit 🛠️**
+> A **TypeScript SDK** for interacting with the **Cardano blockchain**, powered by **Mesh SDK, AI tools, and modular actions**.
+
+[![npm version](https://img.shields.io/npm/v/cardano-agent-kit.svg)](https://www.npmjs.com/package/cardano-agent-kit)  
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)  
 [![Node.js CI](https://github.com/thanhngoc541/cardano-agent-kit/actions/workflows/node.js.yml/badge.svg)](https://github.com/thanhngoc541/cardano-agent-kit/actions)
 
 ---
@@ -16,6 +18,8 @@
 ✅ **Mint & Burn Tokens / NFTs**  
 ✅ **Fetch Transaction History**  
 ✅ **AI-powered Blockchain Tools** (Vercel AI & Langchain integration)  
+✅ **Dynamic Toolset Creation for AI Models**  
+✅ **Exported Actions** (e.g., create wallet, send ADA, burn assets)  
 ✅ **Support for Blockfrost, Koios, Maestro, and U5C Providers**  
 
 ---
@@ -80,44 +84,12 @@ const stakingTxHash = await toolkit.registerAndStakeADA(stakePoolId);
 console.log("✅ Staking TX Hash:", stakingTxHash);
 ```
 
-### **7️⃣ Mint an NFT / Token**
-```ts
-const metadata = {
-    name: "MeshNFT",
-    image: "ipfs://QmRzicpReutwCkM6aotuKjErFCUD213DpwPq6ByuzMJaua",
-    mediaType: "image/jpg",
-    description: "This NFT was minted using CardanoToolKit",
-};
-
-const txHash = await toolkit.mintAsset("MeshNFT", "1", recipient, metadata, "721");
-console.log("✅ NFT Minted! TX Hash:", txHash);
-```
-
-### **8️⃣ Burn an NFT / Token**
-```ts
-const assetUnit = "d9312da562da182b02322fd8acb536f37eb9d29fba7c49dc172555274d657368546f6b656e";
-const burnTxHash = await toolkit.burnAsset(assetUnit, "1");
-console.log("✅ Asset Burned! TX Hash:", burnTxHash);
-```
-
-### **9️⃣ Send an NFT / Token**
-```ts
-const sendTxHash = await toolkit.sendAsset(recipient, assetUnit, "1");
-console.log("✅ Asset Sent! TX Hash:", sendTxHash);
-```
-
-### **🔟 Fetch Transaction History**
-```ts
-const history = await toolkit.getTransactionHistory();
-console.log("Transaction History:", history);
-```
-
 ---
 
-## 🧠 **AI-Powered Blockchain Tools**
-Cardano Agent Kit supports AI-powered **Cardano Blockchain Tools** via **Vercel AI SDK** and **Langchain**.
+## 🧠 **AI-Powered Dynamic Tools**
+Cardano Agent Kit supports **AI-powered blockchain tools** using **Vercel AI SDK** and **Langchain**.
 
-### **1️⃣ Create Vercel AI Tools**
+### **⚡ Create AI-powered Vercel Tools**
 ```ts
 import { createVercelCardanoTools } from "cardano-agent-kit";
 import { CardanoToolKit } from "./cardanoToolKit";
@@ -126,13 +98,36 @@ const toolkit = new CardanoToolKit("blockfrost", API_KEY, "testnet", TEST_MNEMON
 const aiTools = createVercelCardanoTools(toolkit);
 ```
 
-### **2️⃣ Create Langchain AI Tools**
+### **🤖 Create AI-powered Langchain Tools**
 ```ts
 import { createLangchainCardanoTools } from "cardano-agent-kit";
 import { CardanoToolKit } from "./cardanoToolKit";
 
 const toolkit = new CardanoToolKit("blockfrost", API_KEY, "testnet", TEST_MNEMONIC);
 const aiTools = createLangchainCardanoTools(toolkit);
+```
+
+### **🔀 Create Dynamic Toolsets**
+Cardano Agent Kit allows dynamic creation of AI tools for blockchain interactions.
+
+#### **Create AI-powered tools dynamically for Vercel AI**
+```ts
+import { createVercelAITools } from "cardano-agent-kit";
+import { CardanoToolKit } from "./cardanoToolKit";
+import * as actions from "./actions";
+
+const toolkit = new CardanoToolKit("blockfrost", API_KEY, "testnet", TEST_MNEMONIC);
+const aiTools = createVercelAITools(toolkit, Object.values(actions));
+```
+
+#### **Create AI-powered tools dynamically for Langchain**
+```ts
+import { createLangchainTools } from "cardano-agent-kit";
+import { CardanoToolKit } from "./cardanoToolKit";
+import * as actions from "./actions";
+
+const toolkit = new CardanoToolKit("blockfrost", API_KEY, "testnet", TEST_MNEMONIC);
+const aiTools = createLangchainTools(toolkit, Object.values(actions));
 ```
 
 ---
@@ -169,8 +164,10 @@ const aiTools = createLangchainCardanoTools(toolkit);
 ### **AI-Powered Tools**
 | Function | Description |
 |----------|-------------|
-| `createVercelCardanoTools(toolkit)` | Creates AI-powered blockchain tools using Vercel AI SDK. |
-| `createLangchainCardanoTools(toolkit)` | Creates AI-powered blockchain tools using Langchain. |
+| `createVercelCardanoTools(toolkit)` | Creates AI-powered Cardano tools using Vercel AI SDK. |
+| `createLangchainCardanoTools(toolkit)` | Creates AI-powered Cardano tools using Langchain. |
+| `createVercelAITools(toolkit, toolsList)` | Dynamically generates AI-powered blockchain tools for Vercel AI. |
+| `createLangchainTools(toolkit, toolsList)` | Dynamically generates AI-powered blockchain tools for Langchain. |
 
 ---
 
@@ -196,3 +193,12 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 
 ## 🌟 **Support**
 If you find this project useful, please ⭐ **star the repository** and share it with the Cardano community!
+
+---
+
+### ✅ **What's New?**
+1️⃣ **AI-powered Blockchain Interactions** (Vercel AI & Langchain tools)  
+2️⃣ **Dynamic Toolset Creation for AI Models**  
+3️⃣ **Enhanced Transaction History Functionality**  
+4️⃣ **Comprehensive API Documentation & Examples**  
+
