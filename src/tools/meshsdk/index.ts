@@ -11,7 +11,6 @@ import {
 } from "@meshsdk/core";
 
 
-
 export class MeshSDK {
     private wallet: MeshWallet | null = null;
     private provider: BlockfrostProvider | KoiosProvider | MaestroProvider | U5CProvider;
