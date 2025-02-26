@@ -87,8 +87,7 @@ Cardano Agent Kit supports **AI-powered blockchain tools** using **Vercel AI SDK
 
 ### **⚡ Create AI-powered Vercel Tools**
 ```ts
-import { createVercelCardanoTools } from "cardano-agent-kit";
-import { CardanoToolKit } from "./cardanoToolKit";
+import { CardanoToolKit, createVercelCardanoTools } from "cardano-agent-kit";
 
 const toolkit = new CardanoToolKit("blockfrost", API_KEY, "testnet", TEST_MNEMONIC);
 const aiTools = createVercelCardanoTools(toolkit);
@@ -96,8 +95,7 @@ const aiTools = createVercelCardanoTools(toolkit);
 
 ### **🤖 Create AI-powered Langchain Tools**
 ```ts
-import { createLangchainCardanoTools } from "cardano-agent-kit";
-import { CardanoToolKit } from "./cardanoToolKit";
+import { CardanoToolKit, createLangchainCardanoTools } from "cardano-agent-kit";
 
 const toolkit = new CardanoToolKit("blockfrost", API_KEY, "testnet", TEST_MNEMONIC);
 const aiTools = createLangchainCardanoTools(toolkit);
@@ -108,9 +106,8 @@ Cardano Agent Kit allows dynamic creation of AI tools for blockchain interaction
 
 #### **Create AI-powered tools dynamically for Vercel AI**
 ```ts
-import { createVercelAITools } from "cardano-agent-kit";
-import { CardanoToolKit } from "./cardanoToolKit";
-import * as actions from "./actions";
+import { CardanoToolKit, createVercelAITools } from "cardano-agent-kit";
+import * as actions from "cardano-agent-kit/actions";
 
 const toolkit = new CardanoToolKit("blockfrost", API_KEY, "testnet", TEST_MNEMONIC);
 const aiTools = createVercelAITools(toolkit, Object.values(actions));
@@ -118,9 +115,8 @@ const aiTools = createVercelAITools(toolkit, Object.values(actions));
 
 #### **Create AI-powered tools dynamically for Langchain**
 ```ts
-import { createLangchainTools } from "cardano-agent-kit";
-import { CardanoToolKit } from "./cardanoToolKit";
-import * as actions from "./actions";
+import { CardanoToolKit, createLangchainTools } from "cardano-agent-kit";
+import * as actions from "cardano-agent-kit/actions";
 
 const toolkit = new CardanoToolKit("blockfrost", API_KEY, "testnet", TEST_MNEMONIC);
 const aiTools = createLangchainTools(toolkit, Object.values(actions));
