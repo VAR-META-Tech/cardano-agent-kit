@@ -219,41 +219,35 @@ export class MeshSDK {
         }
     }
 
+    /**
+       * **Registers a stake address and delegates to a stake pool**
+       * @param poolId - The stake pool ID to delegate to
+       * @returns The transaction hash
+       */
     async registerAndStakeADA(poolId: string): Promise<string> {
         if (!this.wallet) throw new Error("Wallet not initialized");
 
         try {
             console.log("🔍 Fetching reward (stake) address...");
             const rewardAddresses = await this.wallet.getRewardAddresses();
-
             if (!rewardAddresses || rewardAddresses.length === 0) {
-                throw new Error("❌ No valid reward address found! Ensure this wallet supports staking.");
+                throw new Error("No reward address found. Ensure this wallet supports staking.");
             }
-
             const rewardAddress = rewardAddresses[0];
-            console.log("✅ Valid Stake Address:", rewardAddress);
 
-            // ✅ Fetch the base payment address for transaction fees
-            console.log("🔍 Fetching base payment address...");
-            const usedAddresses = await this.wallet.getUsedAddresses();
-            if (!usedAddresses || usedAddresses.length === 0) {
-                throw new Error("❌ No valid base address found! Ensure the wallet has a transaction history.");
+            // ✅ Ensure it is a valid `stake_test1...` address
+            if (!rewardAddress.startsWith("stake")) {
+                throw new Error(`Invalid stake address! Expected 'stake_test1...', got: ${rewardAddress}`);
             }
-            const baseAddress = usedAddresses[0];
-            console.log("✅ Base Address:", baseAddress);
 
-            console.log("🔎 Checking if the stake address is registered...");
-            let accountInfo;
-            try {
-                accountInfo = await this.provider.fetchAccountInfo(rewardAddress);
-                console.log("ℹ️ Account Info:", accountInfo);
-            } catch (err) {
-                console.warn("⚠️ Unable to fetch account info, assuming stake address is NOT registered.");
-            }
+            console.log("✅ Valid Reward Address:", rewardAddress);
+
+            console.log("🔎 Checking if stake address is registered...");
+            const accountInfo = await this.provider.fetchAccountInfo(rewardAddress);
+            console.log("Account Info:", accountInfo);
 
             const tx = new Transaction({ initiator: this.wallet });
 
-            // ✅ Register stake key if not already active
             if (!accountInfo || !accountInfo.active) {
                 console.log("🚀 Stake address is NOT registered. Registering...");
                 tx.registerStake(rewardAddress);
@@ -262,10 +256,9 @@ export class MeshSDK {
             }
 
             console.log("🔗 Delegating to stake pool:", poolId);
-            tx.delegateStake(rewardAddress, poolId);
 
-            // ✅ Critical: Set the change address!
-            tx.setChangeAddress(baseAddress);
+            // ✅ Ensure rewardAddress is being correctly passed to delegateStake()
+            tx.delegateStake(rewardAddress, poolId);
 
             console.log("⚙️ Building unsigned transaction...");
             const unsignedTx = await tx.build();
@@ -285,7 +278,6 @@ export class MeshSDK {
             throw new Error(`Error staking ADA: ${(error as Error).message}`);
         }
     }
-
 
     /**
       * **Mint an Asset (NFT or Token)**
