@@ -123,26 +123,56 @@ export class MeshSDK {
     }
 
     /**
-     * Fetches all assets in the connected wallet.
+     * Fetches all assets in the connected wallet, including details.
      * Returns an array of objects, each containing:
      * - `unit`: Asset identifier (e.g., "lovelace" for ADA)
      * - `quantity`: Amount held in the wallet
+     * - `policyId`: The policy ID of the asset
+     * - `assetName`: The human-readable name of the asset
+     * - `metadata`: Metadata containing asset details (if available)
      */
-    async getBalance(): Promise<{ unit: string; quantity: string }[]> {
+    async getBalance(): Promise<
+        any[]
+    > {
         if (!this.wallet) throw new Error("Wallet not initialized");
 
         try {
             const balance = await this.wallet.getBalance();
 
             if (!Array.isArray(balance)) {
-                return []; // ✅ Return empty array if the response is invalid
+                return []; // ✅ Return empty array if response is invalid
             }
 
-            return balance; // ✅ Returns full asset list
+            // ✅ Fetch metadata for non-ADA assets
+            const detailedAssets = await Promise.all(
+                balance.map(async (asset) => {
+                    if (asset.unit === "lovelace") {
+                        return { ...asset, policyId: null, assetName: "ADA", metadata: null };
+                    }
+
+                    // ✅ Extract Policy ID and Asset Name
+                    const policyId = asset.unit.slice(0, 56); // First 56 characters
+                    const assetNameHex = asset.unit.slice(56); // Remaining part
+                    const assetName = Buffer.from(assetNameHex, "hex").toString("utf-8");
+
+                    // ✅ Fetch metadata if available
+                    let metadata = null;
+                    try {
+                        metadata = await this.provider.fetchAssetMetadata(asset.unit);
+                    } catch (error) {
+                        console.warn(`No metadata found for ${asset.unit}`);
+                    }
+
+                    return { ...asset, policyId, assetName, metadata };
+                })
+            );
+
+            return detailedAssets;
         } catch (error) {
             throw new Error(`Error fetching balance: ${(error as Error).message}`);
         }
     }
+
 
     /**
      * Signs and submits a transaction.

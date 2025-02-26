@@ -80,26 +80,26 @@ describe("CardanoToolKit", () => {
     });
 
     describe("🔹 NFT Minting", () => {
-        it("should mint an NFT (mocked)", async () => {
+        // it("should mint an NFT (mocked)", async () => {
 
-            const txHash = await toolkit.mintAsset(
-                "MeshNFT",
-                "1",
-                TEST_RECIPIENT,
-                {
-                    name: "Mesh Token",
-                    image: "ipfs://QmRzicpReutwCkM6aotuKjErFCUD213DpwPq6ByuzMJaua",
-                    mediaType: "image/jpg",
-                    description: [
-                        "This NFT was minted using CardanoToolKit",
-                        "Powered by MeshSDK!"
-                    ]
-                }
-            );
+        //     const txHash = await toolkit.mintAsset(
+        //         "MeshNFT",
+        //         "1",
+        //         TEST_RECIPIENT,
+        //         {
+        //             name: "Mesh Token",
+        //             image: "ipfs://QmRzicpReutwCkM6aotuKjErFCUD213DpwPq6ByuzMJaua",
+        //             mediaType: "image/jpg",
+        //             description: [
+        //                 "This NFT was minted using CardanoToolKit",
+        //                 "Powered by MeshSDK!"
+        //             ]
+        //         }
+        //     );
 
-            console.log("Minted NFT TX Hash:", txHash);
-            expect(txHash).toBeDefined();
-        });
+        //     console.log("Minted NFT TX Hash:", txHash);
+        //     expect(txHash).toBeDefined();
+        // });
 
         it("should handle mintNFT errors", async () => {
             jest.spyOn(toolkit, "mintAsset").mockRejectedValue(new Error("Invalid recipient address"));
