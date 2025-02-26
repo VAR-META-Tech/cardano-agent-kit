@@ -1,42 +1,22 @@
-
-
 # **Cardano Agent Kit 🛠️**
-> A **TypeScript SDK** for interacting with the **Cardano blockchain** using Mesh SDK and other tools, etc.
+> A **TypeScript SDK** for interacting with the **Cardano blockchain** using Mesh SDK, AI-powered tools, and other utilities.
 
 [![npm version](https://img.shields.io/npm/v/cardano-agent-kit.svg)](https://www.npmjs.com/package/cardano-agent-kit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Node.js CI](https://github.com/thanhngoc541/cardano-agent-kit/actions/workflows/node.js.yml/badge.svg)](https://github.com/thanhngoc541/cardano-agent-kit/actions)
 
 ---
-## 📂 **Project Structure**
-```
-cardano-agent-kit/
-│── src/
-│   ├── tools/
-│   │   ├── meshsdk.ts        # Mesh SDK Wrapper (Handles wallet operations)
-│   │   ├── blockfrost.ts     # Blockfrost API Handler
-│   │   ├── othertools.ts     # Other tools ...
-│   ├── index.ts              # Entry point (Exports modules)
-│   ├── toolkit.ts            # High-level API for Cardano interactions
-│── examples/                 # Examples to use Cardano Tool Kit...
-│── test/
-│   ├── toolkit.test.ts       # Unit tests for CardanoToolKit
-│   ├── meshsdk.test.ts       # Unit tests for MeshSDK
-│── dist/                     # Compiled output (after build)
-│── package.json              # Project metadata & dependencies
-│── tsconfig.json             # TypeScript configuration
-│── README.md                 # Documentation
-│── LICENSE                   # MIT License
-```
-
 
 ## 🚀 **Features**
-✅ Create & Restore **Cardano Wallets**  
-✅ Get Wallet **Balance** (ADA + Native Assets)  
-✅ **Send ADA (Lovelace)** Transactions  
-✅ **Sign & Submit** Transactions  
-✅ **Stake & Delegate ADA** to Stake Pools  
-✅ Support for **Blockfrost, Koios, Maestro, U5C** providers  
+✅ **Create & Restore Cardano Wallets**  
+✅ **Get Wallet Balance** (ADA + Native Assets)  
+✅ **Send ADA (Lovelace) Transactions**  
+✅ **Sign & Submit Transactions**  
+✅ **Stake & Delegate ADA to Stake Pools**  
+✅ **Mint & Burn Tokens / NFTs**  
+✅ **Fetch Transaction History**  
+✅ **AI-powered Blockchain Tools** (Vercel AI & Langchain integration)  
+✅ **Support for Blockfrost, Koios, Maestro, and U5C Providers**  
 
 ---
 
@@ -100,12 +80,68 @@ const stakingTxHash = await toolkit.registerAndStakeADA(stakePoolId);
 console.log("✅ Staking TX Hash:", stakingTxHash);
 ```
 
+### **7️⃣ Mint an NFT / Token**
+```ts
+const metadata = {
+    name: "MeshNFT",
+    image: "ipfs://QmRzicpReutwCkM6aotuKjErFCUD213DpwPq6ByuzMJaua",
+    mediaType: "image/jpg",
+    description: "This NFT was minted using CardanoToolKit",
+};
+
+const txHash = await toolkit.mintAsset("MeshNFT", "1", recipient, metadata, "721");
+console.log("✅ NFT Minted! TX Hash:", txHash);
+```
+
+### **8️⃣ Burn an NFT / Token**
+```ts
+const assetUnit = "d9312da562da182b02322fd8acb536f37eb9d29fba7c49dc172555274d657368546f6b656e";
+const burnTxHash = await toolkit.burnAsset(assetUnit, "1");
+console.log("✅ Asset Burned! TX Hash:", burnTxHash);
+```
+
+### **9️⃣ Send an NFT / Token**
+```ts
+const sendTxHash = await toolkit.sendAsset(recipient, assetUnit, "1");
+console.log("✅ Asset Sent! TX Hash:", sendTxHash);
+```
+
+### **🔟 Fetch Transaction History**
+```ts
+const history = await toolkit.getTransactionHistory();
+console.log("Transaction History:", history);
+```
+
+---
+
+## 🧠 **AI-Powered Blockchain Tools**
+Cardano Agent Kit supports AI-powered **Cardano Blockchain Tools** via **Vercel AI SDK** and **Langchain**.
+
+### **1️⃣ Create Vercel AI Tools**
+```ts
+import { createVercelCardanoTools } from "cardano-agent-kit";
+import { CardanoToolKit } from "./cardanoToolKit";
+
+const toolkit = new CardanoToolKit("blockfrost", API_KEY, "testnet", TEST_MNEMONIC);
+const aiTools = createVercelCardanoTools(toolkit);
+```
+
+### **2️⃣ Create Langchain AI Tools**
+```ts
+import { createLangchainCardanoTools } from "cardano-agent-kit";
+import { CardanoToolKit } from "./cardanoToolKit";
+
+const toolkit = new CardanoToolKit("blockfrost", API_KEY, "testnet", TEST_MNEMONIC);
+const aiTools = createLangchainCardanoTools(toolkit);
+```
+
 ---
 
 ## 🔬 **API Reference**
 ### **Wallet Functions**
 | Function | Description |
 |----------|-------------|
+| `createWallet()` | Creates a new wallet and returns its mnemonic. |
 | `getMnemonic()` | Returns the wallet mnemonic (if available). |
 | `getPrivateKey()` | Returns the Bech32 private key (if available). |
 | `getAddress()` | Fetches the primary wallet address. |
@@ -117,6 +153,24 @@ console.log("✅ Staking TX Hash:", stakingTxHash);
 | Function | Description |
 |----------|-------------|
 | `registerAndStakeADA(poolId)` | Registers a stake address and delegates to a stake pool. |
+
+### **Asset Functions**
+| Function | Description |
+|----------|-------------|
+| `mintAsset(name, quantity, recipient, metadata, label)` | Mints a new Cardano token/NFT. |
+| `burnAsset(assetUnit, quantity)` | Burns a specific amount of an asset. |
+| `sendAsset(recipient, assetUnit, quantity)` | Transfers a Cardano asset (NFT or token). |
+
+### **Transaction Functions**
+| Function | Description |
+|----------|-------------|
+| `getTransactionHistory()` | Retrieves the transaction history with details on senders, recipients, and amounts. |
+
+### **AI-Powered Tools**
+| Function | Description |
+|----------|-------------|
+| `createVercelCardanoTools(toolkit)` | Creates AI-powered blockchain tools using Vercel AI SDK. |
+| `createLangchainCardanoTools(toolkit)` | Creates AI-powered blockchain tools using Langchain. |
 
 ---
 
