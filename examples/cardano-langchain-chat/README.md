@@ -1,38 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# **Cardano Agent Kit - AI Chat with Langchain Example 🚀**  
 
-## Getting Started
+This example demonstrates how to integrate **AI-powered chat** with **Cardano blockchain** using **Cardano Agent Kit** and **LangChain**.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 📌 **Features**
+- 🔹 AI-driven **Cardano transactions** (send ADA, check balance, view transaction history).  
+- 🔹 Uses **OpenAI GPT-4o** for blockchain-related queries.  
+- 🔹 Handles **multiple AI tool calls** dynamically.  
+- 🔹 Supports **LangChain** for AI-assisted blockchain automation.  
+
+---
+
+## 📦 **Installation**
+```sh
+npm install cardano-agent-kit @langchain/openai @langchain/core next
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠 **How It Works**
+1️⃣ **Initialize** `CardanoToolKit` with your API keys and network details.  
+2️⃣ **Create AI-powered blockchain tools** using `createLangchainCardanoTools()`.  
+3️⃣ **Set up an AI chat API** that interacts with the Cardano blockchain.  
+4️⃣ **Process transactions** dynamically based on AI requests.  
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🎯 **Example Use Cases**
+✅ **Fetch Wallet Address**  
+✅ **Get Wallet Balance**  
+✅ **Send ADA Transactions**  
+✅ **Fetch Transaction History**  
+✅ **Sign & Submit Transactions**  
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 **Getting Started**
+1️⃣ **Set up your `.env.local` file** with API keys.  
+2️⃣ **Run your Next.js app** with `npm run dev`.  
+3️⃣ **Chat with AI** to interact with the **Cardano blockchain**.  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📜 **License**
+This example is open-source under the **MIT License**.  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# cardano-vercel-ai-demo
-# cardano-langchain-chat
+For more details, check out [Cardano Agent Kit](https://github.com/thanhngoc541/cardano-agent-kit). 🚀
