@@ -103,6 +103,7 @@ export class MeshSDK {
         return this.privateKey;
     }
 
+
     /**
      * Returns the wallet's address.
      */
@@ -365,6 +366,50 @@ export class MeshSDK {
         } catch (error) {
             console.error("🔥 Error transferring asset:", error);
             throw new Error(`Error sending asset: ${error instanceof Error ? error.message : JSON.stringify(error)}`);
+        }
+    }
+
+    /**
+   * **Fetches the transaction history of the connected wallet.**
+   * @returns {Promise<any[]>} - Array of transactions with details.
+   */
+    async getTransactionHistory(): Promise<any[]> {
+        if (!this.wallet) throw new Error("Wallet not initialized");
+
+        try {
+            console.log("🔍 Fetching wallet address...");
+            const address = await this.getAddress();
+            console.log("✅ Wallet Address:", address);
+
+            if (this.provider instanceof BlockfrostProvider) {
+                console.log("🔍 Fetching transaction history using Blockfrost...");
+
+                const transactions = await this.provider.fetchAddressTransactions(address);
+
+
+                if (!transactions || transactions.length === 0) {
+                    console.log("ℹ️ No transactions found.");
+                    return [];
+                }
+
+                console.log(`✅ Found ${transactions.length} transactions. Fetching details...`);
+
+                // ✅ Fetch detailed transaction metadata for each transaction
+                const detailedTransactions = await Promise.all(
+                    transactions.map(async (tx) => {
+                        const info = await this.provider.fetchTxInfo(tx.hash);
+                        return { ...info };
+                    })
+                );
+
+                console.log("✅ Transactions with metadata fetched:", detailedTransactions);
+                return detailedTransactions;
+            } else {
+                throw new Error("Transaction history is only supported with Blockfrost.");
+            }
+        } catch (error) {
+            console.error("🔥 Error fetching transaction history:", error);
+            throw new Error(`Error fetching transaction history: ${(error as Error).message}`);
         }
     }
 

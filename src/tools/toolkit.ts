@@ -1,4 +1,5 @@
 import { MeshSDK } from "./meshsdk";
+
 export class CardanoToolKit {
     private meshSDK: MeshSDK;
 
@@ -36,7 +37,7 @@ export class CardanoToolKit {
         }
     }
 
-    async getBalance(): Promise<{ unit: string; quantity: string }[]> {
+    async getBalance(): Promise<{ unit: string; quantity: string; policyId?: string; assetName?: string; metadata?: any }[]> {
         try {
             return await this.meshSDK.getBalance();
         } catch (error) {
@@ -60,8 +61,6 @@ export class CardanoToolKit {
         }
     }
 
-
-
     async registerAndStakeADA(poolId: string): Promise<string> {
         try {
             return await this.meshSDK.registerAndStakeADA(poolId);
@@ -71,14 +70,14 @@ export class CardanoToolKit {
     }
 
     /**
-       * **Mint a Cardano asset (NFT or token).**
-       * @param assetName - The name of the asset (NFT or token)
-       * @param assetQuantity - The quantity to mint (default: 1 for NFTs)
-       * @param recipient - The recipient's Cardano address
-       * @param metadata - Metadata including name, image, mediaType, and description
-       * @param label - "721" for NFTs, "20" for fungible tokens (default: "721")
-       * @returns The transaction hash
-       */
+     * **Mint a Cardano asset (NFT or token).**
+     * @param assetName - The name of the asset (NFT or token)
+     * @param assetQuantity - The quantity to mint (default: 1 for NFTs)
+     * @param recipient - The recipient's Cardano address
+     * @param metadata - Metadata including name, image, mediaType, and description
+     * @param label - "721" for NFTs, "20" for fungible tokens (default: "721")
+     * @returns The transaction hash
+     */
     async mintAsset(
         assetName: string,
         assetQuantity: string = "1",
@@ -124,6 +123,20 @@ export class CardanoToolKit {
             return await this.meshSDK.sendAsset(recipientAddress, assetUnit, assetQuantity);
         } catch (error) {
             throw new Error(`Error sending asset: ${(error as Error).message}`);
+        }
+    }
+
+    /**
+     * **Fetch the transaction history of the connected wallet.**
+     * @returns {Promise<any[]>} - Array of transactions with details.
+     */
+    async getTransactionHistory(): Promise<
+        any[]
+    > {
+        try {
+            return await this.meshSDK.getTransactionHistory();
+        } catch (error) {
+            throw new Error(`Error fetching transaction history: ${(error as Error).message}`);
         }
     }
 }

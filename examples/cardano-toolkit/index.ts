@@ -13,34 +13,39 @@ const TEST_MNEMONIC = [
     "divorce", "attend", "topic", "idea", "finger", "verify"
 ];
 
+async function main() {
+    try {
+        console.log("✅ Initializing CardanoToolKit...");
+        const toolkit = new CardanoToolKit(
+            "blockfrost",
+            API_KEY,
+            "testnet",
+            TEST_MNEMONIC
+        );
+        console.log("✅ CardanoToolKit initialized successfully!");
 
+        console.log("🔍 Fetching sender address...");
+        const senderAddress = await toolkit.getAddress();
+        if (!senderAddress) {
+            console.error("❌ Address Not Found! Make sure your wallet is properly initialized.");
+            return;
+        }
+        console.log("✅ Sender Address:", senderAddress);
 
+        console.log("🔍 Checking wallet balance...");
+        const balance = await toolkit.getBalance();
+        if (!balance.length) {
+            console.warn("⚠️ No funds found in the wallet.");
+        } else {
+            const formattedBalance = balance.map(asset => ({
+                asset: asset.assetName || "ADA",
+                quantity: asset.quantity
+            }));
+            console.log("✅ Wallet Balance:", formattedBalance);
+        }
+    } catch (error) {
+        console.error("🔥 Error:", error instanceof Error ? error.message : error);
+    }
+}
 
-console.log("✅ Initializing CardanoToolKit...");
-const toolkit = new CardanoToolKit(
-    "blockfrost",
-    "previewueSVWOXkYUQdtHQkj0CftJIibwETLjH0",
-    "testnet",
-    "xprv1mpujpqs8nv47d2atwzltun35t9fg9sm58luxytlmazkm6d5ghdvma2gtxnrtvlt739e68gppkuc9t742sz6ht84fa26v827hsuk8mamrfcdyql8eqtzx3fc379pv7qtsjtsg4ahlpcxdz89rlmd23n2y258da03d"
-);
-console.log("✅ CardanoToolKit initialized successfully!");
-
-console.log("🔍 Fetching sender address...");
-const senderAddress = await toolkit.getAddress();
-console.log("✅ Sender Address:", senderAddress || "⚠️ Address Not Found!");
-
-console.log("🔍 Checking wallet balance...");
-const balance = await toolkit.getBalance();
-console.log("✅ Wallet Balance:", balance.length ? balance : "⚠️ No funds found!");
-
-// console.log("Sending 1 ADA to recipient...");
-// const txHash = await toolkit.sendLovelace(TEST_RECIPIENT, "1000000"); // 1 ADA
-
-
-
-// console.log("✅ Transaction Sent! TX Hash:", txHash);
-
-const stakeTx = toolkit.registerAndStakeADA(STACK_POOL_ID)
-console.log("✅ Stake ", stakeTx);
-
-
+main();
