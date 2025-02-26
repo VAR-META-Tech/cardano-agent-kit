@@ -38,10 +38,7 @@ yarn add cardano-agent-kit
 ## 🛠 **Usage Example**
 ### **1️⃣ Import the SDK**
 ```ts
-import { CardanoToolKit, helloCardano } from "cardano-agent-kit";
-
-console.log(helloCardano("Developer")); 
-// Output: "Hello, Developer! Welcome to Cardano Agent Kit."
+import { CardanoToolKit } from "cardano-agent-kit";
 ```
 
 ### **2️⃣ Initialize Wallet**
