@@ -15,7 +15,10 @@
         "update:vercel-ai": "cd examples/vercel-ai-demo && npm i && npm i cardano-agent-kit && npm run dev",
         "update:langchain": "cd examples/cardano-langchain-chat && npm i && npm i cardano-agent-kit && npm run dev",
         "update:toolkit": "cd examples/cardano-toolkit && npm i && npm i cardano-agent-kit && npm start",
-        "test:toolkit": "cd examples/cardano-toolkit && npm i && npm start"
+        "test:toolkit": "cd examples/cardano-toolkit && npm i && npm start",
+        "patch": "npm version patch && npm publish",
+        "minor": "npm version minor && npm publish",
+        "major": "npm version major && npm publish"
     },
     "keywords": [
         "cardano",

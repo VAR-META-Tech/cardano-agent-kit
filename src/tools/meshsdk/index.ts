@@ -369,11 +369,13 @@ export class MeshSDK {
         }
     }
 
-    /**
-   * **Fetches the transaction history of the connected wallet.**
-   * @returns {Promise<any[]>} - Array of transactions with details.
-   */
-    async getTransactionHistory(): Promise<any[]> {
+/**
+ * **Fetches the transaction history of the connected wallet.**
+ * @returns {Promise<any[]>} - Array of transactions with `from` and `to` details.
+ */
+    async getTransactionHistory(): Promise<
+        any[]
+    > {
         if (!this.wallet) throw new Error("Wallet not initialized");
 
         try {
@@ -381,32 +383,33 @@ export class MeshSDK {
             const address = await this.getAddress();
             console.log("✅ Wallet Address:", address);
 
-            if (this.provider instanceof BlockfrostProvider) {
-                console.log("🔍 Fetching transaction history using Blockfrost...");
-
-                const transactions = await this.provider.fetchAddressTransactions(address);
-
-
-                if (!transactions || transactions.length === 0) {
-                    console.log("ℹ️ No transactions found.");
-                    return [];
-                }
-
-                console.log(`✅ Found ${transactions.length} transactions. Fetching details...`);
-
-                // ✅ Fetch detailed transaction metadata for each transaction
-                const detailedTransactions = await Promise.all(
-                    transactions.map(async (tx) => {
-                        const info = await this.provider.fetchTxInfo(tx.hash);
-                        return { ...info };
-                    })
-                );
-
-                console.log("✅ Transactions with metadata fetched:", detailedTransactions);
-                return detailedTransactions;
-            } else {
+            if (!(this.provider instanceof BlockfrostProvider)) {
                 throw new Error("Transaction history is only supported with Blockfrost.");
             }
+
+            console.log("🔍 Fetching transaction history using Blockfrost...");
+            const transactions = await this.provider.fetchAddressTransactions(address);
+
+            if (!transactions || transactions.length === 0) {
+                console.log("ℹ️ No transactions found.");
+                return [];
+            }
+
+            console.log(`✅ Found ${transactions.length} transactions. Fetching details...`);
+
+            // ✅ Fetch full transaction details
+            const detailedTransactions = await Promise.all(
+                transactions.map(async (tx) => {
+                    const info = await this.provider.fetchTxInfo(tx.hash);
+                    const utxos = await this.provider.fetchUTxOs(tx.hash);
+                    return {
+                        ...info, ...utxos
+                    };
+                })
+            );
+
+            console.log("✅ Transactions with mapped details fetched:", detailedTransactions);
+            return detailedTransactions;
         } catch (error) {
             console.error("🔥 Error fetching transaction history:", error);
             throw new Error(`Error fetching transaction history: ${(error as Error).message}`);
