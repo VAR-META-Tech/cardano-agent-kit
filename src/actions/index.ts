@@ -1,3 +1,4 @@
+export { getTransactionHistory } from './getTransactionHistory';
 export { getAddress } from './getAddress';
 export { sendLovelace } from "./sendLovelace";
 export { getBalance } from "./getBalance";
