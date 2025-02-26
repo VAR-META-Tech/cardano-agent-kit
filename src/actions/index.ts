@@ -1,4 +1,4 @@
-import { getAddress } from './getAddress';
+export { getAddress } from './getAddress';
 export { sendLovelace } from "./sendLovelace";
 export { getBalance } from "./getBalance";
 export { createWallet } from "./createWallet";

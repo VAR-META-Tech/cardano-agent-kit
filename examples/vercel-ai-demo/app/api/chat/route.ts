@@ -2,12 +2,15 @@ import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { CardanoToolKit, createVercelCardanoTools } from 'cardano-agent-kit';
 
+
 const toolkit = new CardanoToolKit(
     process.env.CARDANO_PROVIDER ?? '',
     process.env.CARDANO_PROVIDER_API_KEY ?? '',
     process.env.CARDANO_NETWORK,
     process.env.CARDANO_PRIVATE_KEY
 );
+
+
 const aiTools = createVercelCardanoTools(toolkit);
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
