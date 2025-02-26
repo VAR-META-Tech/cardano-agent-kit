@@ -107,19 +107,35 @@ Cardano Agent Kit allows dynamic creation of AI tools for blockchain interaction
 #### **Create AI-powered tools dynamically for Vercel AI**
 ```ts
 import { CardanoToolKit, createVercelAITools } from "cardano-agent-kit";
-import * as actions from "cardano-agent-kit/actions";
+import {
+    getAddress,
+    sendLovelace,
+    getBalance,
+    createWallet,
+    mintAsset,
+    burnAsset,
+    sendAsset
+} from "cardano-agent-kit";
 
 const toolkit = new CardanoToolKit("blockfrost", API_KEY, "testnet", TEST_MNEMONIC);
-const aiTools = createVercelAITools(toolkit, Object.values(actions));
+const aiTools = createVercelAITools(toolkit, [sendAsset, mintAsset, burnAsset, getAddress, sendLovelace, getBalance, createWallet]);
 ```
 
 #### **Create AI-powered tools dynamically for Langchain**
 ```ts
 import { CardanoToolKit, createLangchainTools } from "cardano-agent-kit";
-import * as actions from "cardano-agent-kit/actions";
+import {
+    getAddress,
+    sendLovelace,
+    getBalance,
+    createWallet,
+    mintAsset,
+    burnAsset,
+    sendAsset
+} from "cardano-agent-kit";
 
 const toolkit = new CardanoToolKit("blockfrost", API_KEY, "testnet", TEST_MNEMONIC);
-const aiTools = createLangchainTools(toolkit, Object.values(actions));
+const aiTools = createLangchainTools(toolkit, [sendAsset, mintAsset, burnAsset, getAddress, sendLovelace, getBalance, createWallet]);
 ```
 
 ---
