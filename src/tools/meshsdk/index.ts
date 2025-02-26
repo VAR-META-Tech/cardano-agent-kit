@@ -369,10 +369,10 @@ export class MeshSDK {
         }
     }
 
-/**
- * **Fetches the transaction history of the connected wallet.**
- * @returns {Promise<any[]>} - Array of transactions with `from` and `to` details.
- */
+    /**
+     * **Fetches the transaction history of the connected wallet.**
+     * @returns {Promise<any[]>} - Array of transactions with `from` and `to` details.
+     */
     async getTransactionHistory(): Promise<
         any[]
     > {
@@ -403,7 +403,7 @@ export class MeshSDK {
                     const info = await this.provider.fetchTxInfo(tx.hash);
                     const utxos = await this.provider.fetchUTxOs(tx.hash);
                     return {
-                        ...info, ...utxos
+                        ...info, utxos
                     };
                 })
             );
