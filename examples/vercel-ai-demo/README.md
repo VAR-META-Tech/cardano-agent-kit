@@ -1,37 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# **Cardano Agent Kit - AI Chat Assistant Example 🚀**  
+> This is an example of how to use **Cardano Agent Kit** to integrate AI-powered chat with **Cardano blockchain** functionalities.
 
-## Getting Started
+---
 
-First, run the development server:
+## 📌 **Overview**
+This example demonstrates how to:
+- Use **Cardano Agent Kit** to interact with the **Cardano blockchain**.
+- Integrate **OpenAI GPT-4o** for an **AI-powered chatbot**.
+- Enable real-time **Cardano transactions** (send ADA, fetch balance, get transaction history).
+- Create **dynamic AI tools** using `createVercelCardanoTools()`.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 📦 **Installation**
+```sh
+npm install cardano-agent-kit @ai-sdk/openai @ai-sdk/react
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠 **How It Works**
+### **1️⃣ Backend - AI & Cardano Integration**
+```ts
+import { openai } from '@ai-sdk/openai';
+import { streamText } from 'ai';
+import { CardanoToolKit, createVercelCardanoTools } from 'cardano-agent-kit';
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+const toolkit = new CardanoToolKit(
+    process.env.CARDANO_PROVIDER ?? '',
+    process.env.CARDANO_PROVIDER_API_KEY ?? '',
+    process.env.CARDANO_NETWORK,
+    process.env.CARDANO_PRIVATE_KEY
+);
+const aiTools = createVercelCardanoTools(toolkit);
 
-## Learn More
+export async function POST(req: Request) {
+    const { messages } = await req.json();
+    return streamText({
+        model: openai('gpt-4o-mini'),
+        messages,
+        tools: aiTools,
+        maxSteps: 5
+    }).toDataStreamResponse();
+}
+```
 
-To learn more about Next.js, take a look at the following resources:
+### **2️⃣ Frontend - AI Chat UI**
+```tsx
+import { useChat } from '@ai-sdk/react';
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+export default function Page() {
+    const { messages, input, handleInputChange, handleSubmit } = useChat();
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    return (
+        <div>
+            <h1>AI Chat Assistant</h1>
+            <div>
+                {messages.map((message) => (
+                    <p key={message.id}><strong>{message.role}:</strong> {message.content}</p>
+                ))}
+            </div>
+            <form onSubmit={handleSubmit}>
+                <input value={input} onChange={handleInputChange} placeholder="Type a message..." />
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    );
+}
+```
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🚀 **Try It Out**
+1. Install dependencies  
+2. Set up `.env.local` with Cardano & OpenAI API keys  
+3. Run `npm run dev`  
+4. Chat with AI & interact with Cardano blockchain!  
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# cardano-vercel-ai-demo
+---
+
+## 📜 **License**
+This example is open-source under the **MIT License**.  
+
+For more details, check out [Cardano Agent Kit](https://github.com/thanhngoc541/cardano-agent-kit). 🚀
