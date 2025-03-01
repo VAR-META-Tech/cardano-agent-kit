@@ -1,6 +1,6 @@
-import { helloCardano, CardanoToolKit } from "cardano-agent-kit";
+import { CardanoToolKit } from "cardano-agent-kit";
 
-console.log(helloCardano("Ngoc"));
+
 
 const API_KEY = "previewueSVWOXkYUQdtHQkj0CftJIibwETLjH0";
 const TEST_MNEMONIC = [
@@ -9,11 +9,11 @@ const TEST_MNEMONIC = [
     "dinosaur", "rough", "first", "south", "cave", "clerk",
     "divorce", "attend", "topic", "idea", "finger", "verify"
 ];
-
+const TEST_PRIVATE_KEY = "xprv1mpujpqs8nv47d2atwzltun35t9fg9sm58luxytlmazkm6d5ghdvma2gtxnrtvlt739e68gppkuc9t742sz6ht84fa26v827hsuk8mamrfcdyql8eqtzx3fc379pv7qtsjtsg4ahlpcxdz89rlmd23n2y258da03d"
 async function main() {
     try {
         console.log("✅ Initializing CardanoToolKit...");
-        const toolkit = new CardanoToolKit("blockfrost", API_KEY, "testnet", TEST_MNEMONIC);
+        const toolkit = new CardanoToolKit("blockfrost", API_KEY, "testnet", TEST_PRIVATE_KEY);
         console.log("✅ CardanoToolKit initialized successfully!");
 
         console.log("🔍 Fetching sender address...");

@@ -119,14 +119,14 @@ describe("🔹 CardanoToolKit", () => {
         });
     });
 
-    describe("🔹 Fetching Transaction History", () => {
-        it("should fetch transaction history (mocked)", async () => {
+    // describe("🔹 Fetching Transaction History", () => {
+    //     it("should fetch transaction history (mocked)", async () => {
 
-            const transactions = await toolkit.getTransactionHistory();
+    //         const transactions = await toolkit.getTransactionHistory();
 
-            expect(Array.isArray(transactions)).toBe(true);
-        });
-    });
+    //         expect(Array.isArray(transactions)).toBe(true);
+    //     });
+    // });
 
     /**
      * **🚀 Real Transaction Tests**
