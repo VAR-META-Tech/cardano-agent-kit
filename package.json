@@ -16,9 +16,9 @@
         "update:langchain": "cd examples/cardano-langchain-chat && npm i && npm i cardano-agent-kit && npm run dev",
         "update:toolkit": "cd examples/cardano-toolkit && npm i && npm i cardano-agent-kit && npm start",
         "test:toolkit": "cd examples/cardano-toolkit && npm i && npm start",
-        "patch": "npm version patch && npm publish",
-        "minor": "npm version minor && npm publish",
-        "major": "npm version major && npm publish"
+        "patch": "npm version patch && npm publish && npm run update:toolkit",
+        "minor": "npm version minor && npm publish && npm run update:toolkit",
+        "major": "npm version major && npm publish && npm run update:toolkit"
     },
     "keywords": [
         "cardano",
