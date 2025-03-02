@@ -1,2 +1,2 @@
-export * from "./initCardano.ts";
-export * from "./sendLovelace.ts";
+export * from "./initCardano";
+export * from "./sendLovelace";
