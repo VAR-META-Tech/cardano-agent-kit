@@ -1,6 +1,6 @@
 {
     "name": "cardano-agent-kit",
-    "version": "1.2.10",
+    "version": "1.2.11",
     "description": "A TypeScript SDK for interacting with Cardano blockchain agents",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
