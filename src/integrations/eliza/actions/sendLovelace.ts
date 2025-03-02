@@ -24,6 +24,7 @@ export const sendLovelaceAction: Action = {
         _options: { [key: string]: unknown } = {},
         callback?: HandlerCallback
     ): Promise<boolean> => {
+        state = state ?? (await runtime.composeState(message) as State);
         elizaLogger.log("🚀 Initiating SEND_LOVELACE handler...");
         callback?.({ text: "Processing Lovelace transfer..." });
 
