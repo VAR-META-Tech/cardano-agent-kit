@@ -7,7 +7,7 @@ import {
     type State,
     type Action,
 } from "@elizaos/core";
-import { extractLovelaceTransaction, initializeCardanoToolKit } from "../utils/index";
+import { extractLovelaceTransaction, initializeCardanoToolKit } from "../utils/index.ts";
 
 export const sendLovelaceAction: Action = {
     name: "SEND_LOVELACE",
