@@ -25,7 +25,9 @@
         "ai",
         "agent",
         "blockchain",
-        "sdk"
+        "sdk",
+        "vercel-ai",
+        "langchain"
     ],
     "repository": {
         "type": "git",
