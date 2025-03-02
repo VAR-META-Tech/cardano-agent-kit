@@ -49,5 +49,11 @@
     },
     "peerDependencies": {
         "@elizaos/core": "^0.1.9"
-    }
+    },
+    "exports": {
+        ".": {
+          "import": "./dist/index.js",
+          "require": "./dist/index.cjs"
+        }
+      }
 }
