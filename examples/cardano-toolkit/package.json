@@ -12,6 +12,6 @@
     "license": "ISC",
     "description": "",
     "dependencies": {
-        "cardano-agent-kit": "^1.2.3"
+        "cardano-agent-kit": "^1.2.4"
     }
 }
