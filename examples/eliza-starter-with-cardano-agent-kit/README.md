@@ -92,3 +92,5 @@ docker compose -f docker-compose-image.yaml up
 # Deploy with Railway
 
 [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/template/aW47_j)
+
+![Screenshot 2025-03-03 at 13 48 50](https://github.com/user-attachments/assets/9878491a-01e9-4fd4-9bfb-ffe048ad4b73)
