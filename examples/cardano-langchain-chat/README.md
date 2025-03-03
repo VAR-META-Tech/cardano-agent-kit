@@ -47,3 +47,5 @@ npm install cardano-agent-kit @langchain/openai @langchain/core next
 This example is open-source under the **MIT License**.  
 
 For more details, check out [Cardano Agent Kit](https://github.com/thanhngoc541/cardano-agent-kit). 🚀
+
+[LIVE DEMO](https://cardano-langchain-chat.vercel.app/)
