@@ -82,3 +82,5 @@ export default function Page() {
 This example is open-source under the **MIT License**.  
 
 For more details, check out [Cardano Agent Kit](https://github.com/thanhngoc541/cardano-agent-kit). 🚀
+
+[LIVE DEMO](https://cardano-vercel-ai.vercel.app/)
