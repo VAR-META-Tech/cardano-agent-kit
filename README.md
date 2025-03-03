@@ -2,7 +2,7 @@
 
 # **Cardano Agent Kit 🛠️**
 
-> A **TypeScript SDK** for interacting with the **Cardano blockchain**, powered by **Mesh SDK, AI tools, and modular actions**.
+> A **TypeScript SDK** for interacting with the **Cardano blockchain**, include integration with Vercel AI, Langchain, Eliza...
 
 [![npm version](https://img.shields.io/npm/v/cardano-agent-kit.svg)](https://www.npmjs.com/package/cardano-agent-kit)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
