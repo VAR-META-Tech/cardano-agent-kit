@@ -12,15 +12,25 @@
 ## 🚀 **Features**
 
 ✅ **Create & Restore Cardano Wallets**
+
 ✅ **Get Wallet Balance** (ADA + Native Assets)
+
 ✅ **Send ADA (Lovelace) Transactions**
+
 ✅ **Sign & Submit Transactions**
+
 ✅ **Stake & Delegate ADA to Stake Pools**
+
 ✅ **Mint & Burn Tokens / NFTs**
+
 ✅ **Fetch Transaction History**
+
 ✅ **AI-powered Blockchain Tools** (Vercel AI & Langchain integration)
+
 ✅ **Dynamic Toolset Creation for AI Models**
+
 ✅ **Exported Actions** (e.g., create wallet, send ADA, burn assets)
+
 ✅ **Support for Blockfrost, Koios, Maestro, and U5C Providers**
 
 ---
@@ -258,6 +268,9 @@ If you find this project useful, please ⭐ **star the repository** and share it
 ### ✅ **What's New?**
 
 1️⃣ **AI-powered Blockchain Interactions** (Vercel AI & Langchain tools)
+
 2️⃣ **Dynamic Toolset Creation for AI Models**
+
 3️⃣ **Enhanced Transaction History Functionality**
+
 4️⃣ **Comprehensive API Documentation & Examples**
